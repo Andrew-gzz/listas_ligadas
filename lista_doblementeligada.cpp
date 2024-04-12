@@ -136,19 +136,25 @@ void elimina_pasajero() {
 
 }
 
-void leer_arch_pas(const char archivo[]) {
-	ifstream filepass(archivo, ios::binary);
-	if (filepass.is_open()) {
-		nodo_pasajeros nuevo;
-		while (filepass.read((char*)&nuevo, sizeof(nodo_pasajeros))) {
-			agregar_pasajero(&nuevo);
+void leer_arch_pas(char archivo[]) {
+	ifstream archivaldo;
+	archivaldo.open(archivo, ios::binary);
+	if (archivaldo.is_open()) {
+		//leer archivo, byte x byte y crear la lista ligada
+		aux_pasajeros = new nodo_pasajeros;
+		archivaldo.read((char*)aux_pasajeros, sizeof(nodo_pasajeros));
+		aux_pasajeros->ant = 0;
+		aux_pasajeros->sig = 0;
+		while (!archivaldo.eof()) {
+			agregar_pasajero(aux_pasajeros);
+
+			aux_pasajeros = new nodo_pasajeros;
+			archivaldo.read((char*)aux_pasajeros, sizeof(nodo_pasajeros));
+			aux_pasajeros->ant = 0;
+			aux_pasajeros->sig = 0;
 		}
-		filepass.close();
-		printf("archivo cargado\n");
 	}
-	else {
-		printf("archivo no se pudo leer\n");
-	}
+	archivaldo.close();
 }
 
 void escribe_arch_pas(char archivo[]) {
