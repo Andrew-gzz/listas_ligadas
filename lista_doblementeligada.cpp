@@ -193,7 +193,7 @@ bool buscar_pasajero(int busqueda) {
 
 int main() {
 	CNombres nombres; 
-	////string var = "hola";
+	
 	char carpeta[MAX_PATH] = "";
 	char archi[] = "\\passengers.dat";
 	string nombre, apellidoP, apellidoM; 
@@ -202,10 +202,6 @@ int main() {
 	short opc = 0, _opc = 0;
 	char mensaje[40];
 	int _pasa;
-
-	//printf("%s", carpeta);
-	//system("pause");
-
 
 	leer_arch_pas(carpeta);
 
