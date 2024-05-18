@@ -190,6 +190,51 @@ bool buscar_pasajero(int busqueda) {
 	return false;
 }
 
+void intercambiar(nodo_pasajeros* a, nodo_pasajeros* b) {
+	swap(*a, *b);
+
+	// Restaurar los punteros ant y sig
+	nodo_pasajeros* temp_ant = a->ant;
+	nodo_pasajeros* temp_sig = a->sig;
+
+	a->ant = b->ant;
+	a->sig = b->sig;
+
+	b->ant = temp_ant;
+	b->sig = temp_sig;
+
+	if (a->sig) a->sig->ant = a;
+	if (a->ant) a->ant->sig = a;
+
+	if (b->sig) b->sig->ant = b;
+	if (b->ant) b->ant->sig = b;
+}
+
+
+nodo_pasajeros* particionar(nodo_pasajeros* inicio, nodo_pasajeros* fin) {
+	int pivote = fin->pasaporte;
+	nodo_pasajeros* i = inicio->ant;
+
+	for (nodo_pasajeros* j = inicio; j != fin; j = j->sig) {
+		if (j->pasaporte <= pivote) {
+			i = (i == nullptr) ? inicio : i->sig;
+			intercambiar(i, j);
+		}
+	}
+	i = (i == nullptr) ? inicio : i->sig;
+	intercambiar(i, fin);
+	return i;
+}
+
+void quicksort(nodo_pasajeros* inicio, nodo_pasajeros* fin) {
+	if (inicio != nullptr && fin != nullptr && inicio != fin && inicio != fin->sig) {
+		nodo_pasajeros* pi = particionar(inicio, fin);
+		quicksort(inicio, pi->ant);
+		quicksort(pi->sig, fin);
+	}
+}
+
+
 
 int main() {
 	CNombres nombres; 
@@ -226,10 +271,9 @@ int main() {
 			aux_pasajeros->ant = nullptr; 
 			aux_pasajeros->sig = nullptr; 
 
-			captura_pasajeros(aux_pasajeros, nombres); 
+			captura_pasajeros(aux_pasajeros, nombres);  		  
 			agregar_pasajero(aux_pasajeros); 
-
-			
+			quicksort(ini_pasajeros, fin_pasajeros); 
 			strcpy(mensaje, "pasajero agregado"); 
 
 		}break;
@@ -280,17 +324,17 @@ int main() {
 			while (aux_pasajeros != 0)
 			{
 				// mostrar el nodo
-				cout << "Nombre:" << endl;
+				cout << "Nombre: ";
 				cout << aux_pasajeros->NombreCompleto << endl;
-				cout << "Nacionalidad" << endl;
+				cout << "Nacionalidad: ";
 				cout << aux_pasajeros->nacionalidad << endl;
-				cout << "Pasaporte" << endl;
+				cout << "Pasaporte: ";
 				cout << aux_pasajeros->pasaporte << endl;
 
 				aux_pasajeros = aux_pasajeros->sig;
 			}
 			strcpy(mensaje, "fin de lista");
-			system("pause");
+			system("pause"); 
 			break;
 		case 6:
 			system("cls");
@@ -298,17 +342,17 @@ int main() {
 			while (aux_pasajeros != 0) //2
 			{
 				// mostrar el nodo
-				cout << "Nombre:" << endl;
+				cout << "Nombre: ";
 				cout << aux_pasajeros->NombreCompleto << endl;
-				cout << "Nacionalidad" << endl;
+				cout << "Nacionalidad: ";
 				cout << aux_pasajeros->nacionalidad << endl;
-				cout << "Pasaporte" << endl;
+				cout << "Pasaporte: ";
 				cout << aux_pasajeros->pasaporte << endl;
 
 				aux_pasajeros = aux_pasajeros->ant; //3
 			}
 			strcpy(mensaje, "fin de lista");
-
+			system("pause");  
 			break;
 		}
 		printf("%s\n", mensaje);
